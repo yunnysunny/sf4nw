@@ -19,18 +19,22 @@ http.createServer(function(req, res) {
 	if(vars.pathname == '/snapshot') {
 		var params = vars.query;
 		if(params.url) {
-			var refresh = (params.refresh == '1');
+			var transfer = new Transfer(req,res);
+			var pos = transfer.calStartPosition();
+			
+			var refresh = (params.refresh == '1' && pos.start == 0);
+			console.log(pos.start);
 			var cmd = new SnapshotCmd(params.url);
 			cmd.getImage(function(data){
 				if (data.code == errcode.ERROR_SUCCESS && data.img) {
-					var transfer = new Transfer(req,res);
+					
 					
 					transfer.download("F:\\music\\beyonce-if i were a boy.mp3");
 				} else {
 					res.writeHead(errcode.ERROR_INTER_ERROR,{'Content-type': 'text/html'});
 					res.end();
 				}
-			},false);
+			},refresh);
 		} else {
 			res.writeHead(errcode.ERROR_HTTP_PARAM,{'Content-type': 'text/html'});
 			res.end();
