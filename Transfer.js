@@ -1,3 +1,6 @@
+var fs = require('fs');
+var path = require('path');
+
 function Transfer(req, resp) {
     this.req = req;
     this.resp = resp;
@@ -5,16 +8,19 @@ function Transfer(req, resp) {
 
 /**
  * @description 计算上次的断点信息
- * @param {string} Range 请求http头文件中的断点信息，如果没有则为undefined，格式（range: bytes=232323-）
- * @return {integer} startPos 开始的下载点
+ * @param {string} Range 请求http头文件中的断点信息，如果没有则为undefined，格式（range: bytes=开始位置-结束位置）
+ * @return {object} {start,end} 开始的下载点,结束的下载点
  */
 var calStartPosition = function(Range) {
     var startPos = 0;
 	var endPos = 0;
     if( typeof Range != 'undefined') {
+    	console.log(Range);
         var posMatch = /^bytes=([0-9]+)-([0-9]*)$/.exec(Range);
         startPos = Number(posMatch[1]);
 		endPos = Number(posMatch[2]);
+    } else {
+    	console.log('no range');
     }
     return {start:startPos, end:endPos};
 }
@@ -26,15 +32,19 @@ var calStartPosition = function(Range) {
 var configHeader = function(resp,Config) {
     var startPos = Config.startPos, 
 		endPos = Config.endPos,
+		filename = Config.filename,
         fileSize = Config.fileSize;
     // 如果startPos为0，表示文件从0开始下载的，否则则表示是断点下载的。
+    console.log(filename+'start:'+startPos+'end:'+endPos);
     if(startPos == 0) {
         resp.setHeader('Accept-Range', 'bytes');
     } else {
         resp.setHeader('Content-Range', 'bytes ' + startPos + '-' + endPos + '/' + fileSize);//从开始位置起，下载到结束位置
     }
-    resp.writeHead(206, 'Partial Content', {
-        'Content-Type' : 'application/octet-stream',
+    resp.writeHead(200,  {
+        'Content-Type' : 'application/force-download',
+        'Content-Length' : (endPos-startPos+1),
+        'Content-Disposition' : 'attachment;filename=' + filename
     });
 }
 
@@ -58,9 +68,9 @@ var init = function(self, filePath, down) {
 		var start = pos.start;//获取range头的开始位置
 		var end = pos.end;//结束位置
 		
-		config.startPos = start;
-		
-		config.endPos = end > 0 && end < size && end > start ? end : size;
+		config.startPos = start;		
+		config.endPos = end > 0 && end < size && end > start ? end : (size-1);
+		config.filename = path.basename(filePath);
         
         configHeader(self.resp,config);
         down(config);
@@ -72,7 +82,7 @@ var init = function(self, filePath, down) {
  */
 Transfer.prototype.download = function(filePath) {
     var self = this;
-    path.exists(filePath, function(exist) {
+    fs.exists(filePath, function(exist) {
         if(exist) {
             init(self, filePath, function(config) {
                 var  resp = self.resp;
@@ -91,6 +101,9 @@ Transfer.prototype.download = function(filePath) {
             });
         } else {
             console.log('文件不存在！');
+            var  resp = self.resp;
+            resp.writeHead(404,{'Content-type': 'text/html'});
+            resp.end();
             return;
         }
     });

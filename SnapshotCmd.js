@@ -1,5 +1,4 @@
 var spawn = require('child_process').spawn;
-var hash = require('crypto').createHash('md5');
 var fs = require("fs");
 var errcode = require('./errcode');
 
@@ -18,7 +17,8 @@ function SnapshotCmd(url,option) {
 }
 SnapshotCmd.prototype = {
     getImage : function(callback, isRefresh) {
-        var imageName = this.savePath + hash.update(this.url).digest('hex') + '.png';
+        var imageName = this.savePath 
+        	+ require('crypto').createHash('md5').update(this.url).digest('hex') + '.png';
 		var phantomjsPath = this.phantomjsPath;
 		var url = this.url;
 		
