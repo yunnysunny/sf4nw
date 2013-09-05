@@ -5,7 +5,33 @@ var SnapshotCmd = require('./SnapshotCmd');
 var errcode = require('./errcode');
 var Transfer = require('./Transfer');
 
+var config = require('./config');
+var fs = require('fs');
 var reqNow = null;
+
+function init() {
+	fs.exists(config.SAVE_PATH,function(exist) {
+		if (exist) {
+			fs.stat(config.SAVE_PATH,function(err,stat) {
+				if (err) {
+					throw err;
+				}
+				if (!stat.isDirectory()) {
+					throw new Error('the given save path must be a folder');
+				}
+			});
+		} else {
+			fs.mkdir(config.SAVE_PATH,function(err) {
+				if (err) {
+					throw err;
+				}
+			});
+		}
+	});
+	
+}
+
+init();
 
 http.createServer(function(req, res) {
 	reqNow = req;
@@ -23,13 +49,12 @@ http.createServer(function(req, res) {
 			var pos = transfer.calStartPosition();
 			
 			var refresh = (params.refresh == '1' && pos.start == 0);
-			console.log(pos.start);
-			var cmd = new SnapshotCmd(params.url);
+
+			var cmd = new SnapshotCmd(params.url,{savePath:config.SAVE_PATH});
 			cmd.getImage(function(data){
-				if (data.code == errcode.ERROR_SUCCESS && data.img) {
+				if (data.code == errcode.ERROR_SUCCESS && data.img) {					
 					
-					
-					transfer.download("F:\\music\\beyonce-if i were a boy.mp3");
+					transfer.download(data.img);
 				} else {
 					res.writeHead(errcode.ERROR_INTER_ERROR,{'Content-type': 'text/html'});
 					res.end();

@@ -8,8 +8,12 @@ function SnapshotCmd(url,option) {
     this.phantomjsPath = 'phantomjs';
 	
     if (typeof(option) == 'object') {
-        option.savePath && this.savePath = option.savePath;
-        option.phantomjsPath && this.phantomjsPath = option.phantomjsPath;
+    	if (option.savePath) {
+    		this.savePath = option.savePath;
+    	}
+        if (option.phantomjsPath) {
+        	this.phantomjsPath = option.phantomjsPath;
+        }        
     } else {        
         
     }

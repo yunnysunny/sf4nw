@@ -22,7 +22,7 @@ Transfer.prototype.calStartPosition = function() {
 	var Range = this.req.headers.range;
     
     if( typeof Range != 'undefined') {
-    	console.log(Range);
+    	
         var posMatch = /^bytes=([0-9]+)-([0-9]*)$/.exec(Range);
         this.startPos = Number(posMatch[1]);
 		this.endPos = Number(posMatch[2]);
