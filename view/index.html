@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>网页截图</title>
+	<script type="text/javascript" language="javascript" src="/assets/js/lib/jquery-1.10.2.js"></script>
+	<style type="text/css">
+		.desp {
+			margin:auto;
+			width:80%;
+			margin-bottom:10px;
+			text-align:center;
+		}
+		.desp span {			
+			font-size:14px;
+		}
+		.form {
+			margin:auto;
+			width:80%;
+			text-align:center;
+		}
+		.form span {
+			font-size:14px;
+		}
+	</style>
+</head>
+<body>
+<div class="desp">
+	<span>请输入网址，然后点击下载按钮</span>
+</div>
+<div class="form">
+	<form id="snapForm" action="/snapshot">
+		<span>网址：</span><input type="text" name="url" size="50" />
+		<input type="submit" value="下载" />
+	</form>
+</div>
+
+<iframe src="" style="display:none;" id="downloadFrame" />
+</body>
+</html>
+
+<script language="javascript">
+	$(document).ready(function() {
+		$('#snapForm').onsubmit(function() {
+			var self = $(this);
+			$('#downloadFrame').attr('src', self.attr('action')+'?'+self.serialize());
+			return false;
+		});
+	});
+</script>
