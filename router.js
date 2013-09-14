@@ -10,7 +10,7 @@ function route(request,response,handle) {
 
 		handle[pathname].service(request,response);
 	} else {		
-		resource.output(response,pathname);		
+		resource.output(request,response,pathname);		
 	}	
 }
  
