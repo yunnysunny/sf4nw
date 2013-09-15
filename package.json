@@ -32,7 +32,9 @@
     "node": ">=0.7"
   },
   
-
+  "dependencies": {
+	  "doT": "1.x"	  
+  },
   "readmeFilename": "README.md"
   
 }
