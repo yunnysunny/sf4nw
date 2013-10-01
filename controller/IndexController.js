@@ -9,7 +9,7 @@ util.inherits(IndexController,Controller);
 
 IndexController.prototype.doGet = function(request,response) {
 	console.log('index [get]');
-	this.loadView(request,response,'index');
+	this.loadView(response,'index');
 }
 
 module.exports = IndexController;

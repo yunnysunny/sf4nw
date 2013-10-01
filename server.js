@@ -4,7 +4,8 @@ var cluster = require('cluster');
 var define = require('./define');
 var config = require('./config');
 /**
- * 定义全局变量,检查截图文件夹是否存在
+ * 1定义全局变量,
+ * 2检查截图文件夹是否存在
  */
 function init() {
 	define(global, 'GLOBAL_APP_BASE', __dirname);
@@ -73,7 +74,7 @@ function start(route, handle) {
 
 		var server = require('http').createServer(function(req, res) {
 			var d = domain.create();
-			d.on('error', function(er) {
+			d.on('error', function(er) {//处理异常
 				console.error('error', er.stack);
 
 				// Note: we're in dangerous territory!
@@ -101,7 +102,7 @@ function start(route, handle) {
 					// problem
 					res.statusCode = 500;
 					res.setHeader('content-type', 'text/plain');
-					res.end('Internal Error!\n');
+					res.end('矮油，出错了!\n');
 				} catch (er2) {
 					// oh well, not much we can do at this point.
 					console.error('Error sending 500!', er2.stack);
@@ -120,21 +121,10 @@ function start(route, handle) {
 			});
 		});
 		server.listen(config.HTTP_PORT);
+		console.log('start on port ' + config.HTTP_PORT);
 	}
 
 }
-
-//process.on('uncaughtException', function(err) {
-//	console
-//			.error((new Date).toUTCString() + ' uncaughtException:',
-//					err.message);
-//	console.error(err.stack);
-//	// process.exit(1);
-//	// if (reqNow != null) {
-//	// console.log(url.parse(reqNow.url,true));
-//	// }
-//
-//});
 
 exports.start = start;
 exports.init = init;

@@ -23,9 +23,9 @@ Controller.prototype.service = function(request,response) {
 	}
 }
 
-Controller.prototype.loadView = function(request,response,tplName,params) {
+Controller.prototype.loadView = function(response,tplName,params) {
 
-	resource.loadTpl(request,response,tplName,params);
+	resource.loadTpl(response,tplName,params);
 }	
 
 module.exports = Controller;
