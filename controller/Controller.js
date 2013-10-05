@@ -5,6 +5,10 @@ function Controller() {
 	this.name="controller";
 }
 
+Controller.prototype.init = function() {
+	return this;
+}
+
 Controller.prototype.service = function(request,response) {
 	if (request.method == 'POST') {
 		if (typeof (this.doPost) != 'function') {

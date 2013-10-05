@@ -25,4 +25,5 @@ define(exports,'EXT_TO_CONTENT_TYPE' , {
 		'.xml': {contentType : 'text/xml', maxAge : 7200}
 });
 
-define(exports,'DEFAULT_WELCOME_INDEX',{})
+define(exports,'DEFAULT_WELCOME_INDEX',{});
+

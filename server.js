@@ -3,13 +3,13 @@ var fs = require('fs');
 var cluster = require('cluster');
 var define = require('./define');
 var config = require('./config');
+var HttpRequest = require('./lib/HttpRequest');
+var HttpResponse = require('./lib/HttpResponse');
 /**
  * 1定义全局变量,
  * 2检查截图文件夹是否存在
  */
 function init() {
-	define(global, 'GLOBAL_APP_BASE', __dirname);
-	define(global, 'GLOBAL_VIEW_PATH', GLOBAL_APP_BASE + '/view');
 
 	fs.exists(config.SAVE_PATH, function(exist) {
 		if (exist) {
@@ -30,8 +30,20 @@ function init() {
 		}
 	});
 }
-function start(route, handle) {
+function start(route, handle, filters) {
+	var filterLen = 0;
+	if (filters) {
+		filterLen = filters.length;
+	}
 	function onRequest(request, response) {
+		
+		
+		for(var i=0;i<filterLen;i++) {
+			if ((filters[i]).doFilter(request,response) == false) {
+				return;
+			}
+		}
+		console.log('cookie:'+request.headers.cookie);
 		route(request, response, handle);
 	}
 
@@ -73,6 +85,9 @@ function start(route, handle) {
 		// worker processes to serve requests. How it works, caveats, etc.
 
 		var server = require('http').createServer(function(req, res) {
+			req = new HttpRequest(req);
+			res = new HttpResponse(res);
+			
 			var d = domain.create();
 			d.on('error', function(er) {//处理异常
 				console.error('error', er.stack);
