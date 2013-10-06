@@ -15,4 +15,4 @@ function route(request,response,handle) {
 	}	
 }
  
-exports.route = route;
+module.exports = route;

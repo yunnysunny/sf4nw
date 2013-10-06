@@ -1,9 +1,9 @@
-var Controller = require('./Controller');
+var Controller = require('../lib/mvc/AbstractController');
 var util = require('util');
 var url = require('url');
 var SnapshotCmd = require('../lib/snapshot/SnapshotCmd');
 var Transfer = require('../lib/Transfer');
-var errcode = require('../errcode');
+var errcode = require('../lib/snapshot/errcode');
 var error = require('../lib/error');
 var config = require('../config');
 

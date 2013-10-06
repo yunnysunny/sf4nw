@@ -1,5 +1,5 @@
 var util = require('util');
-var AbstractFilter = require('./AbstractFilter');
+var AbstractFilter = require('../lib/mvc/AbstractFilter');
 var Cookie = require('../lib/Cookie');
 
 function CookieFilter() {

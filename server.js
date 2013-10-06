@@ -1,38 +1,29 @@
 var http = require("http");
-var fs = require('fs');
 var cluster = require('cluster');
-var define = require('./define');
 var config = require('./config');
 var HttpRequest = require('./lib/HttpRequest');
 var HttpResponse = require('./lib/HttpResponse');
 /**
- * 1定义全局变量,
- * 2检查截图文件夹是否存在
+ * 
+ * @param {array} initFuns
  */
-function init() {
-
-	fs.exists(config.SAVE_PATH, function(exist) {
-		if (exist) {
-			fs.stat(config.SAVE_PATH, function(err, stat) {
-				if (err) {
-					throw err;
-				}
-				if (!stat.isDirectory()) {
-					throw new Error('the given save path must be a folder');
-				}
-			});
-		} else {
-			fs.mkdir(config.SAVE_PATH, function(err) {
-				if (err) {
-					throw err;
-				}
-			});
+function init(initFuns) {
+	if (initFuns instanceof Array) {
+		for (var i=0,len=initFuns.length;i<len;i++) {
+			(initFuns[i])();
 		}
-	});
+	}
+	
 }
+/**
+ * 
+ * @param {function} route
+ * @param {array} handle
+ * @param {array} filters
+ */
 function start(route, handle, filters) {
 	var filterLen = 0;
-	if (filters) {
+	if (filters instanceof Array) {
 		filterLen = filters.length;
 	}
 	function onRequest(request, response) {
@@ -46,12 +37,6 @@ function start(route, handle, filters) {
 		console.log('cookie:'+request.headers.cookie);
 		route(request, response, handle);
 	}
-
-	// http.createServer(onRequest).listen(config.HTTP_PORT);
-	// console.log('Server has started on port[' + config.HTTP_PORT + '].');
-
-	
-	
 
 	if (cluster.isMaster) {
 		// In real life, you'd probably use more than just 2 workers,

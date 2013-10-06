@@ -1,4 +1,4 @@
-var Controller = require('./Controller');
+var Controller = require('../lib/mvc/AbstractController');
 var util = require('util');
 
 function IndexController() {
