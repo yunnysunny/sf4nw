@@ -27,3 +27,5 @@ define(exports,'EXT_TO_CONTENT_TYPE' , {
 
 define(exports,'DEFAULT_WELCOME_INDEX',{});
 
+define(exports, 'SESSION_ID_NAME', 'nsessionid');
+
