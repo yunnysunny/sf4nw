@@ -7,7 +7,7 @@ function define(namespace, name, value) {
 		configurable: false
     });
 }
-define.__L = function(path) {
-	return new (require(path))();
+define.__L = function(path,params) {
+	return new (require(path))(params);
 }
 module.exports = define;

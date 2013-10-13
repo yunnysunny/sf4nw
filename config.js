@@ -29,3 +29,9 @@ define(exports,'DEFAULT_WELCOME_INDEX',{});
 
 define(exports, 'SESSION_ID_NAME', 'nsessionid');
 
+define(exports,'SESSION_OPTION', {
+	cookieName : 'nsessionid',
+	maxActiveTime : 7200	
+});
+
+define(exports,'SESSION_MANAGE',define.__L('./lib/store/MemStoreManage', exports.SESSION_OPTION));

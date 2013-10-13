@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>post test</title>  
+		<meta name="Author" content="sunny">
+		<script type="text/javascript" language="javascript" src="/assets/js/lib/jquery-1.10.2.js"></script>		
+	</head>
+<body>
+	<h2>post test</h2>
+	<form id="testForm" action="/posttest" method="post">
+		<p>
+			<lable>名称：</lable><input name="name" type="text" />
+		</p>
+		<p><input type="submit" value="submit" /></p>
+	</form>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#testForm').submit(function() {
+				
+				$.post($(this).attr('action'),$(this).serialize(),function(data) {
+					console.log(data);
+				},'json');
+				/*
+				$.get('/gettest',$(this).serialize(),function(data) {
+					
+					console.log(data);
+				});*/
+				return false;
+			});
+		});
+	</script>
+</body>
+</html>

@@ -9,7 +9,7 @@ function CookieFilter() {
 util.inherits(CookieFilter,AbstractFilter);
 
 CookieFilter.prototype.doFilter = function(request, response) {
-	request.headers.cookie = Cookie.unserialize(request.headers.cookie);
+	request.cookie = Cookie.unserialize(request.headers.cookie);
 	return true;
 }
 
