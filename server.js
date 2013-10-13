@@ -21,7 +21,7 @@ function init(initFuns) {
  * @param {array} handle
  * @param {array} filters
  */
-function start(route, handle, filters) {
+function start(route, filters) {
 	var filterLen = 0;
 	if (filters instanceof Array) {
 		filterLen = filters.length;
@@ -35,7 +35,7 @@ function start(route, handle, filters) {
 			}
 		}
 		console.log('cookie:'+request.headers.cookie);
-		route(request, response, handle);
+		route(request, response);
 	}
 
 	if (cluster.isMaster) {
@@ -51,8 +51,9 @@ function start(route, handle, filters) {
 		// The important thing is that the master does very little,
 		// increasing our resilience to unexpected errors.
 
-		//cluster.fork();
-		cluster.fork();
+		for(var i=0;i<config.WOKER_PROCESS_COUNT;i++) {
+			cluster.fork();
+		}		
 
 		cluster.on('disconnect', function(worker) {
 			console.error('disconnect!');

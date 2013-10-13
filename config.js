@@ -1,8 +1,15 @@
 var define = require('./define');
-
-define(exports, 'SAVE_PATH', './images/');
+/**
+ * 应用启动后cluster模块开启的进程数
+ */
+define(exports, 'WOKER_PROCESS_COUNT', 1);
+/**
+ * 应用开启的端口号
+ */
 define(exports, 'HTTP_PORT', 81);
-
+/**
+ * 静态文件的Mime-Type和缓存时间配置
+ */
 define(exports,'EXT_TO_CONTENT_TYPE' , {
 		'.html' : {contentType : 'text/html', maxAge : 7200},
 		'.htm' : {contentType : 'text/html', maxAge : 7200},
@@ -24,14 +31,20 @@ define(exports,'EXT_TO_CONTENT_TYPE' , {
 		'.pdf': {contentType : 'application/pdf', maxAge : 7200},
 		'.xml': {contentType : 'text/xml', maxAge : 7200}
 });
-
+/**
+ * 应用的默认的欢迎页
+ */
 define(exports,'DEFAULT_WELCOME_INDEX',{});
-
-define(exports, 'SESSION_ID_NAME', 'nsessionid');
-
+/**
+ * session的配置选项
+ */
 define(exports,'SESSION_OPTION', {
 	cookieName : 'nsessionid',
 	maxActiveTime : 7200	
 });
-
+/**
+ * session处理对象
+ */
 define(exports,'SESSION_MANAGE',define.__L('./lib/store/MemStoreManage', exports.SESSION_OPTION));
+
+define(exports, 'SAVE_PATH', './images/');
