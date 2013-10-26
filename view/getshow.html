@@ -2,12 +2,12 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>post test</title>  
+		<title>get test</title>  
 		<meta name="Author" content="sunny">
 		<script type="text/javascript" language="javascript" src="/assets/js/lib/jquery-1.10.2.js"></script>		
 	</head>
 <body>
-	<h2>post test</h2>
+	<h2>get test</h2>
 	<form id="testForm" action="/posttest" method="post">
 		<p>
 			<lable>名称：</lable><input name="name" type="text" />
@@ -16,12 +16,11 @@
 	</form>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$('#testForm').submit(function() {
-				
-				$.post($(this).attr('action'),$(this).serialize(),function(data) {
+			$('#testForm').submit(function() {				
+				$.get('/gettest',$(this).serialize(),function(data) {
+					
 					console.log(data);
 				},'json');
-				
 				return false;
 			});
 		});

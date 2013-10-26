@@ -24,7 +24,7 @@ function isValidValue(result, maxAge) {
 SessionFilter.prototype.doFilter = function(request, response) {
 	var sessionid = request.getCookie(sessionOption.cookieName);
 	if (sessionid) {
-		
+		console.log('sessionid:' + sessionid);
 		var sessionResult = sessionManage.get(sessionid);
 		if (isValidValue(sessionResult, sessionOption.maxActiveTime)) {
 			request.session = sessionResult;

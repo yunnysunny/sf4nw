@@ -48,3 +48,11 @@ define(exports,'SESSION_OPTION', {
 define(exports,'SESSION_MANAGE',define.__L('./lib/store/MemStoreManage', exports.SESSION_OPTION));
 
 define(exports, 'SAVE_PATH', './images/');
+/**
+ * 自定义的HTTP请求方法名在url中的参数名，这个参数将在控制器中读取。
+ * 这个参数如果不配置，则默认'm'。
+ * 
+ * @example baseurl?m=show，控制器在判断当前请求为get时，会读取m参数，
+ * 来获取当前需要调用的控制的函数名为showAction
+ * */
+define(exports, 'CUSTOM_METHOD_NAME', 'm');

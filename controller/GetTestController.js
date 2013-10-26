@@ -8,7 +8,12 @@ function GetTestController() {
 util.inherits(GetTestController,Controller);
 
 GetTestController.prototype.doGet = function(request,response) {
-	response.end('{code : 0,name:"'+request.getParam('name')+'"}'); 
+	if (request.isAjaxReq()) {
+		response.end('{"code" : 0,"name":"'+request.getParam('name')+'"}');
+	} else {
+		response.loadView('getshow');
+	}
+	 
 }
 
 module.exports = GetTestController;

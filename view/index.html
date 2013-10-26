@@ -2,49 +2,42 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>网页截图</title>
-	<script type="text/javascript" language="javascript" src="/assets/js/lib/jquery-1.10.2.js"></script>
+	<title>首页</title>
+	
 	<style type="text/css">
 		.desp {
 			margin:auto;
 			width:80%;
 			margin-bottom:10px;
-			text-align:center;
+			text-align:left;
 		}
 		.desp span {			
 			font-size:14px;
 		}
-		.form {
+		.list {
 			margin:auto;
 			width:80%;
-			text-align:center;
+			text-align:left;
 		}
-		.form span {
+		.list li {
+			list-style:none;
+		}
+		.list a {
 			font-size:14px;
 		}
 	</style>
 </head>
 <body>
 <div class="desp">
-	<span>请输入网址（例如：http://baidu.com），然后点击下载按钮</span>
+	<span>演示地址：</span>
 </div>
-<div class="form">
-	<form id="snapForm" action="/snapshot">
-		<span>网址：</span><input type="text" name="url" size="50" />
-		<input type="submit" value="下载" />
-	</form>
+<div class="list">
+	<ul>
+		<li><a href="/posttest">post请求</a></li>
+		<li><a href="/gettest">get请求</a></li>
+		<li><a href="/snapshot?m=showPage">下载请求</a></li>
+	</ul>
 </div>
 
-<iframe src="" style="display:none;" id="downloadFrame" />
 </body>
 </html>
-
-<script language="javascript">
-	$(document).ready(function() {
-		$('#snapForm').onsubmit(function() {
-			var self = $(this);
-			$('#downloadFrame').attr('src', self.attr('action')+'?'+self.serialize());
-			return false;
-		});
-	});
-</script>

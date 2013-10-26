@@ -13,6 +13,10 @@ function SnapshotController() {
 
 util.inherits(SnapshotController,Controller);
 
+SnapshotController.prototype.showPageAction = function(request, response) {
+	response.loadView('snap');
+}
+
 SnapshotController.prototype.doGet = function(request,response) {
 	var vars = url.parse(request.url,true);
 	
