@@ -1,7 +1,7 @@
 {
-  "name": "easysnapshot",
-  "version": "0.1",
-  "description": "A tool, based on phantomjs, provide the ablity of snapshoting a url.",
+  "name": "sf4nw",
+  "version": "0.1.2",
+  "description": "A simple framework for node web developement.",
   "author": {
     "name": "yunnysunny",
     "email": "yunnysunny@gmail.com"
@@ -15,17 +15,17 @@
   "repositories": [
 	  {
 		"type": "git",
-		"url": "https://github.com/yunnysunny/easysnapshot.git"
+		"url": "https://github.com/yunnysunny/sf4nw.git"
 	  },
 	  {
 		"type": "git",
-		"url": "http://git.oschina.net/yunnysunny/easysnapshot.git"
+		"url": "http://git.oschina.net/yunnysunny/sf4nw.git"
 	  }
   ],
   "bugs": {
-    "url": "https://github.com/yunnysunny/easysnapshot/issues"
+    "url": "https://github.com/yunnysunny/sf4nw/issues"
   },
-  "homepage": "https://github.com/yunnysunny/easysnapshot",
+  "homepage": "https://github.com/yunnysunny/sf4nw",
   "main": "index.js",
   
   "engines": {
