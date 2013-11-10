@@ -2,7 +2,10 @@
 SF4NW 是simple framework for node web的缩写，旨在构建一个简单易用的node web开发框架。  
 SF4NW在设计的时候借鉴了java中j2ee的思想。比如说控制器基类AbstractController中的doService、doGet、doPost方法，是仿照servlet设计的；拦截器基类AbstractFilter中的doFilter也是仿照j2ee中拦截器设计的。此外一些api的命名方式也有仿照的痕迹。  
 ## 1.架构 ##
-现在框架的大体流程是这个样子，http请求产生后首先经过各个拦截器处理。如果在处理过程中任何一个拦截器在调用doFilter方法的时候返回false，则结束当前请求处理，返回结果给用户浏览器；否则，在所有拦截器处理结束后，交到路由器进行处理。这里的路由器，其实是指各个url和其对应的处理代码，系统内部首先判断当前url有没有对应的控制器类，如果存在，则调用控制类的doGet或者doPost方法，否则则将当前url当前静态资源处理。
+现在框架的大体流程是这个样子，框架运行的时候，首先加载一系列的自定义初始化函数（如果存在的话），接着创建http服务。具体流程如下图：    
+![服务启动流程](https://raw.github.com/yunnysunny/sf4nw/master/doc/start.png)    
+http请求产生后首先经过各个拦截器处理。如果在处理过程中任何一个拦截器在调用doFilter方法的时候返回false，则结束当前请求处理，返回结果给用户浏览器；否则，在所有拦截器处理结束后，交到路由器进行处理。这里的路由器，其实是指各个url和其对应的处理代码，系统内部首先判断当前url有没有对应的控制器类，如果存在，则调用控制类的doGet或者doPost方法，否则则将当前url当前静态资源处理。具体流程如下图：    
+![请求处理流程](https://raw.github.com/yunnysunny/sf4nw/master/doc/request.png)    
 ## 2.使用 ##
 一般node在调用第三方代码的时候都是使用npm安装某一个指定模块，SF4NW和这种传统模式不同，它需要将整个框架的代码下载到你本地，比如你可以选择git工具通过`git clone https://github.com/yunnysunny/sf4nw.git`来将所有要用到的代码下载到本地。
 ### 2.1 入口代码  
