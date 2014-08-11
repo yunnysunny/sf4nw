@@ -10,8 +10,8 @@
 对于中文版的ubuntu或者windows不需要安装第三方的软件包，就可以用。
 然后安装node.js，从nodejs官网页（[http://nodejs.org/download/](http://nodejs.org/download/)）下载可执行程序。安装完成后，确保node目录下的bin目录添加到环境变量path中（windows版的安装程序，安装过程中会提示是否添加到环境变量）。  
 ###2.启动###
-将本项目通过git clone或者通过直接下载zip文件然后解压缩的方式，在您的本地硬盘中进入截图工具目录，在其下会看到index.js文件，运行`node index.js`即可。  
-> 注意对于命令行环境的centos要运行`DISPLAY=:0 node index.js`，否则截出来的图片内容是空白的。 
+将本项目通过git clone或者通过直接下载zip文件然后解压缩的方式，在您的本地硬盘中进入截图工具目录，在其下会看到index.js文件，运行`node app.js`即可。
+> 注意对于命令行环境的centos要运行`DISPLAY=:0 node app.js`，否则截出来的图片内容是空白的。
 
 ###3.调用###
 启动完毕后再浏览器中输入：  

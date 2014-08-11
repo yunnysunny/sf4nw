@@ -2,7 +2,7 @@ var util = require('util');
 var AbstractFilter = require('../lib/mvc/AbstractFilter');
 var Cookie = require('../lib/Cookie');
 var Session = require('../lib/store/Session');
-var config = require('../config');
+var config = require('../config/config');
 var sessionOption = config.SESSION_OPTION;
 var sessionManage = config.SESSION_MANAGE;
 

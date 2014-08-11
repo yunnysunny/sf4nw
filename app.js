@@ -1,9 +1,10 @@
-var server = require("./server");
-var route = require("./route");
-var handle = require('./handle');
-var filters = require('./filters');
-var inits = require('./inits');
-var define = require('./define');
+var server = require("./core/server");
+var route = require("./core/route");
+var handle = require('./config/handle');
+var filters = require('./config/filters');
+var inits = require('./config/inits');
+var define = require('./core/define');
+
 /**
  * 应用所在的根目录
  */
@@ -23,5 +24,7 @@ server.init(inits.AUTOLOAD_FUNS);
 /**
  * 指定当前应用的路由器和拦截器
  * */
+
 server.start(route(handle),filters.FILTER_MAP);
+console.log('[%s] Server running', process.pid);
 

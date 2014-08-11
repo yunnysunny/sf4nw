@@ -1,7 +1,7 @@
 var path = require('path');
 var url = require('url');
-var resource = require('./lib/resource');
-require('./lib/string');
+var resource = require('./../lib/resource');
+require('./../lib/string');
 
 function route(handle) {
 	return function(request,response) {

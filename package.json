@@ -26,14 +26,14 @@
     "url": "https://github.com/yunnysunny/sf4nw/issues"
   },
   "homepage": "https://github.com/yunnysunny/sf4nw",
-  "main": "index.js",
+  "main": "app.js",
   
   "engines": {
     "node": ">=0.7"
   },
   
   "dependencies": {
-	  "doT": "1.x"	  
+	  "doT": "1.x"
   },
   "readmeFilename": "README.md"
   

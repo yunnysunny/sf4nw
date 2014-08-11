@@ -1,1 +1,9 @@
 /images
+
+/*.log
+/*.heapsnapshot
+
+/profile.txt
+
+/*.iml
+/.idea

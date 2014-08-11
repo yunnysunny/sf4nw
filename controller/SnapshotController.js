@@ -5,7 +5,7 @@ var SnapshotCmd = require('../lib/snapshot/SnapshotCmd');
 var Transfer = require('../lib/Transfer');
 var errcode = require('../lib/snapshot/errcode');
 var error = require('../lib/error');
-var config = require('../config');
+var config = require('../config/config');
 
 function SnapshotController() {
 	
