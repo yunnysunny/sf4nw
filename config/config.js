@@ -45,7 +45,7 @@ define(exports,'SESSION_OPTION', {
 /**
  * session处理对象
  */
-define(exports,'SESSION_MANAGE',define.__L('./lib/store/MemStoreManage', exports.SESSION_OPTION));
+define(exports,'SESSION_MANAGE',define.__L('../lib/store/MemStoreManage', exports.SESSION_OPTION));
 
 define(exports, 'SAVE_PATH', './images/');
 /**

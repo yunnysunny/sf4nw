@@ -33,7 +33,7 @@
   },
   
   "dependencies": {
-	  "doT": "1.x"
+	  "dot": "1.x"
   },
   "readmeFilename": "README.md"
   
