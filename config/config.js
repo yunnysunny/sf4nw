@@ -1,4 +1,4 @@
-var define = require('./../core/define');
+var define = require('../core/define');
 /**
  * 应用启动后cluster模块开启的进程数
  */

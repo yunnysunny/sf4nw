@@ -1,5 +1,5 @@
 var fs = require('fs');
-var define = require('./../core/define');
+var define = require('../core/define');
 var config = require('./config');
 
 /**

@@ -1,4 +1,4 @@
-var define = require('./../core/define');
+var define = require('../core/define');
 
 var FILTER_MAP = [
     define.__L('../filter/CookieFilter'),

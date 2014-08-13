@@ -1,8 +1,8 @@
 var http = require("http");
 var cluster = require('cluster');
-var config = require('./../config/config');
-var HttpRequest = require('./../lib/HttpRequest');
-var HttpResponse = require('./../lib/HttpResponse');
+var config = require('../config/config');
+var HttpRequest = require('../lib/HttpRequest');
+var HttpResponse = require('../lib/HttpResponse');
 /**
  * 
  * @param {array} initFuns

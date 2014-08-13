@@ -1,4 +1,4 @@
-var define = require('./../core/define');
+var define = require('../core/define');
 
 define(exports,'/',____L('../controller/IndexController'));
 define(exports,'/snapshot',define.__L('../controller/SnapshotController'));
