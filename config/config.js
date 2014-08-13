@@ -6,7 +6,7 @@ define(exports, 'WOKER_PROCESS_COUNT', 1);
 /**
  * 应用开启的端口号
  */
-define(exports, 'HTTP_PORT', 80);
+define(exports, 'HTTP_PORT', process.env.PORT || 8705);
 /**
  * 静态文件的Mime-Type和缓存时间配置
  */
