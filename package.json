@@ -12,16 +12,12 @@
 	  "email": "yunnysunny@gmail.com"
     }
   ],
-  "repositories": [
-	  {
-		"type": "git",
-		"url": "https://github.com/yunnysunny/sf4nw.git"
-	  },
-	  {
-		"type": "git",
-		"url": "http://git.oschina.net/yunnysunny/sf4nw.git"
-	  }
-  ],
+  "repository": 
+  {
+	"type": "git",
+	"url": "https://github.com/yunnysunny/sf4nw.git"
+  },
+	  
   "bugs": {
     "url": "https://github.com/yunnysunny/sf4nw/issues"
   },
