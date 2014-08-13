@@ -27,4 +27,7 @@ server.init(inits.AUTOLOAD_FUNS);
 
 server.start(route(handle),filters.FILTER_MAP);
 console.log('[%s] Server running', process.pid);
+process.on('uncaughtException', function(err) {
+    console.log(err);
+});
 
