@@ -15,6 +15,84 @@ function init(initFuns) {
 	}
 	
 }
+
+function createHttpServer(route, filters,useSingle) {
+    var filterLen = 0;
+    if (filters instanceof Array) {
+        filterLen = filters.length;
+    }
+    //
+    // This is where we put our bugs!
+
+    var domain = require('domain');
+
+    // See the cluster documentation for more details about using
+    // worker processes to serve requests. How it works, caveats, etc.
+
+    var server = require('http').createServer(function(req, res) {
+        req = new HttpRequest(req);
+        res = new HttpResponse(res);
+
+        var d = domain.create();
+        d.on('error', function(er) {//处理异常
+            console.error('error', er.stack);
+
+            // Note: we're in dangerous territory!
+            // By definition, something unexpected occurred,
+            // which we probably didn't want.
+            // Anything can happen now! Be very careful!
+
+            try {
+                // make sure we close down within 30 seconds
+                var killtimer = setTimeout(function() {
+                    process.exit(1);
+                }, 30000);
+                // But don't keep the process open just for that!
+                killtimer.unref();
+
+                // stop taking new requests.
+                server.close();
+                if (!useSingle) {
+                    // Let the master know we're dead. This will trigger a
+                    // 'disconnect' in the cluster master, and then it will fork
+                    // a new worker.
+                    cluster.worker.disconnect();
+                }
+
+
+                // try to send an error to the request that triggered the
+                // problem
+                res.statusCode = 500;
+                res.setHeader('content-type', 'text/plain');
+                res.end('矮油，出错了!\n');
+            } catch (er2) {
+                // oh well, not much we can do at this point.
+                console.error('Error sending 500!', er2.stack);
+            }
+        });
+
+        // Because req and res were created before this domain existed,
+        // we need to explicitly add them.
+        // See the explanation of implicit vs explicit binding below.
+        d.add(req);
+        d.add(res);
+
+        // Now run the handler function in the domain.
+        d.run(function() {
+            //onRequest(req, res);
+            for(var i=0;i<filterLen;i++) {
+                if ((filters[i]).doFilter(req,res) == false) {
+                    return;
+                }
+            }
+            console.log('cookie:'+req.headers.cookie);
+            route(req,res);
+        });
+    });
+    server.listen(config.HTTP_PORT);
+    console.log('[%s] Server running', process.pid);
+    console.log('start on port ' + config.HTTP_PORT);
+}
 /**
  * 
  * @param {function} route
@@ -22,22 +100,12 @@ function init(initFuns) {
  * @param {array} filters
  */
 function start(route, filters) {
-	var filterLen = 0;
-	if (filters instanceof Array) {
-		filterLen = filters.length;
-	}
-	function onRequest(request, response) {
-		
-		
-		for(var i=0;i<filterLen;i++) {
-			if ((filters[i]).doFilter(request,response) == false) {
-				return;
-			}
-		}
-		console.log('cookie:'+request.headers.cookie);
-		route(request, response);
-	}
 
+	var useSingle = process.env.USE_SINGLE_PROCESS == 'true';
+    if (useSingle) {
+        createHttpServer(route, filters,false);
+        return;
+    }
 	if (cluster.isMaster) {
 		// In real life, you'd probably use more than just 2 workers,
 		// and perhaps not put the master and worker in the same file.
@@ -50,7 +118,6 @@ function start(route, filters) {
 		//
 		// The important thing is that the master does very little,
 		// increasing our resilience to unexpected errors.
-
 		for(var i=0;i<config.WOKER_PROCESS_COUNT;i++) {
 			cluster.fork();
 		}		
@@ -59,70 +126,10 @@ function start(route, filters) {
 			console.error('disconnect!');
 			cluster.fork();
 		});
-
+        console.log('[%s] master process running', process.pid);
 	} else {
 		// the worker
-		//
-		// This is where we put our bugs!
-
-		var domain = require('domain');
-
-		// See the cluster documentation for more details about using
-		// worker processes to serve requests. How it works, caveats, etc.
-
-		var server = require('http').createServer(function(req, res) {
-			req = new HttpRequest(req);
-			res = new HttpResponse(res);
-			
-			var d = domain.create();
-			d.on('error', function(er) {//处理异常
-				console.error('error', er.stack);
-
-				// Note: we're in dangerous territory!
-				// By definition, something unexpected occurred,
-				// which we probably didn't want.
-				// Anything can happen now! Be very careful!
-
-				try {
-					// make sure we close down within 30 seconds
-					var killtimer = setTimeout(function() {
-						process.exit(1);
-					}, 30000);
-					// But don't keep the process open just for that!
-					killtimer.unref();
-
-					// stop taking new requests.
-					server.close();
-
-					// Let the master know we're dead. This will trigger a
-					// 'disconnect' in the cluster master, and then it will fork
-					// a new worker.
-					cluster.worker.disconnect();
-
-					// try to send an error to the request that triggered the
-					// problem
-					res.statusCode = 500;
-					res.setHeader('content-type', 'text/plain');
-					res.end('矮油，出错了!\n');
-				} catch (er2) {
-					// oh well, not much we can do at this point.
-					console.error('Error sending 500!', er2.stack);
-				}
-			});
-
-			// Because req and res were created before this domain existed,
-			// we need to explicitly add them.
-			// See the explanation of implicit vs explicit binding below.
-			d.add(req);
-			d.add(res);
-
-			// Now run the handler function in the domain.
-			d.run(function() {
-				onRequest(req, res);
-			});
-		});
-		server.listen(config.HTTP_PORT);
-		console.log('start on port ' + config.HTTP_PORT);
+        createHttpServer(route, filters,useSingle);
 	}
 
 }
