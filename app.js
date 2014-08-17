@@ -9,6 +9,8 @@ var define = require('./core/define');
  * 应用所在的根目录
  */
 define(global, 'GLOBAL_APP_BASE', __dirname);
+
+define(global,'VIEW_TPL_NAME','dot');
 /**
  * 视图所在文件夹
  */
