@@ -56,3 +56,15 @@ define(exports, 'SAVE_PATH', './images/');
  * 来获取当前需要调用的控制的函数名为showAction
  * */
 define(exports, 'CUSTOM_METHOD_NAME', 'm');
+
+try {
+    var configJson = require('./config.json');
+    if (!configJson || typeof (configJson) != 'object') {
+        return;
+    }
+    if (typeof(configJson.useSingleProcess) != 'undefined') {
+        process.env.USE_SINGLE_PROCESS = 'true';
+    }
+} catch (e) {
+
+}
