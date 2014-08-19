@@ -1,4 +1,16 @@
 var define = require('../core/define');
+var configJson = {};
+try {
+    configJson = require('./config.json');
+    if (!configJson || typeof (configJson) != 'object') {
+        return;
+    }
+    if (configJson.useSingleProcess) {
+        process.env.USE_SINGLE_PROCESS = 'true';
+    }
+} catch (e) {
+
+}
 /**
  * 应用启动后cluster模块开启的进程数
  */
@@ -57,14 +69,3 @@ define(exports, 'SAVE_PATH', './images/');
  * */
 define(exports, 'CUSTOM_METHOD_NAME', 'm');
 
-try {
-    var configJson = require('./config.json');
-    if (!configJson || typeof (configJson) != 'object') {
-        return;
-    }
-    if (typeof(configJson.useSingleProcess) != 'undefined') {
-        process.env.USE_SINGLE_PROCESS = 'true';
-    }
-} catch (e) {
-
-}
