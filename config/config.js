@@ -26,10 +26,10 @@ define(exports, 'WOKER_PROCESS_COUNT', configJson.workCount || envVars.WORK_COUN
  */
 define(exports, 'HTTP_PORT', configJson.port ||  envVars.PORT || 8705);
 /**
- * 生成文件保存目录
+ * 生成文件保存目录,注意路径要以`/`结尾
  */
-if (envVars.USE_MOPASS_FS) {//使用mopass的文件服务
-    var path = envVars[envVars.MOPASS_FS_PATH] + '/' + envVars[envVars.MOPASS_FS_NAME];
+if (envVars.USE_MOPASS_FS == 'true') {//使用mopass的文件服务
+    var path = envVars[envVars.MOPASS_FS_PATH] + '/' + envVars[envVars.MOPASS_FS_NAME]+'/';
     define(exports, 'SAVE_PATH', path);
 } else if (configJson.savePath){//使用配置文件中的保存路径
     define(exports, 'SAVE_PATH', configJson.savePath);
