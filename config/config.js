@@ -1,5 +1,6 @@
 var define = require('../core/define');
 var configJson = {};
+var envVars = process.env;
 try {
     configJson = require('./config.json');
     if (!configJson || typeof (configJson) != 'object') {
@@ -12,26 +13,43 @@ try {
 
 }
 /**
+ * WOKER_PROCESS_COUNT和HTTP_PORT两个变量先从配置文件中读取，
+ * 如果不存在然后从环境变量中读取
+ */
+
+/**
  * 应用启动后cluster模块开启的进程数
  */
-define(exports, 'WOKER_PROCESS_COUNT', 1);
+define(exports, 'WOKER_PROCESS_COUNT', configJson.workCount || envVars.WORK_COUNT ||  1);
 /**
  * 应用开启的端口号
  */
-define(exports, 'HTTP_PORT', process.env.PORT || 8705);
+define(exports, 'HTTP_PORT', configJson.port ||  envVars.PORT || 8705);
+/**
+ * 生成文件保存目录
+ */
+if (envVars.USE_MOPASS_FS) {//使用mopass的文件服务
+    var path = envVars[envVars.MOPASS_FS_PATH] + '/' + envVars[envVars.MOPASS_FS_NAME];
+    define(exports, 'SAVE_PATH', path);
+} else if (configJson.savePath){//使用配置文件中的保存路径
+    define(exports, 'SAVE_PATH', configJson.savePath);
+} else {//默认保存路径
+    define(exports, 'SAVE_PATH', './images/');
+}
+
 /**
  * 静态文件的Mime-Type和缓存时间配置
  */
 define(exports,'EXT_TO_CONTENT_TYPE' , {
-		'.html' : {contentType : 'text/html', maxAge : 7200, compress : true},
-		'.htm' : {contentType : 'text/html', maxAge : 7200, compress : true},
-		'.png' : {contentType : 'imgage/png', maxAge : 7200},
-		'.gif' : {contentType : 'image/gif', maxAge : 7200},
-		'.jpg' : {contentType : 'image/jpeg', maxAge : 7200},
-		'.jpeg' : {contentType : 'image/jpeg', maxAge : 7200},
+		'.html' : {contentType : 'text/html', maxAge : 0, compress : true},
+		'.htm' : {contentType : 'text/html', maxAge : 0, compress : true},
+		'.png' : {contentType : 'image/png', maxAge : 0},
+		'.gif' : {contentType : 'image/gif', maxAge : 0},
+		'.jpg' : {contentType : 'image/jpeg', maxAge : 0},
+		'.jpeg' : {contentType : 'image/jpeg', maxAge : 0},
 		'.ico' : {contentType : 'image/x-icon', maxAge : 7200},
-		'.css' : {contentType : 'text/css', maxAge : 7200, compress : true},
-		'.js' : {contentType : 'text/javascript', maxAge : 7200, compress : true},
+		'.css' : {contentType : 'text/css', maxAge : 0, compress : true},
+		'.js' : {contentType : 'text/javascript', maxAge : 0, compress : true},
 		'.txt' : {contentType : 'text/plain', maxAge : 7200, compress : true},
 		'.svg': {contentType : 'image/svg+xml', maxAge : 7200},
 		'.swf': {contentType : 'application/x-shockwave-flash', maxAge : 7200},
@@ -39,9 +57,9 @@ define(exports,'EXT_TO_CONTENT_TYPE' , {
 		'.wav': {contentType : 'audio/x-wav', maxAge : 7200},
 		'.wma': {contentType : 'audio/x-ms-wma', maxAge : 7200},
 		'.wmv': {contentType : 'video/x-ms-wmv', maxAge : 7200},
-		'.json': {contentType : 'application/json', maxAge : 7200, compress : true},
+		'.json': {contentType : 'application/json', maxAge : 0, compress : true},
 		'.pdf': {contentType : 'application/pdf', maxAge : 7200},
-		'.xml': {contentType : 'text/xml', maxAge : 7200, compress : true}
+		'.xml': {contentType : 'text/xml', maxAge : 0, compress : true}
 });
 /**
  * 应用的默认的欢迎页
@@ -59,7 +77,7 @@ define(exports,'SESSION_OPTION', {
  */
 define(exports,'SESSION_MANAGE',define.__L('../lib/store/MemStoreManage', exports.SESSION_OPTION));
 
-define(exports, 'SAVE_PATH', './images/');
+
 /**
  * 自定义的HTTP请求方法名在url中的参数名，这个参数将在控制器中读取。
  * 这个参数如果不配置，则默认'm'。
