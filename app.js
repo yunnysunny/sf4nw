@@ -30,6 +30,6 @@ server.init(inits.AUTOLOAD_FUNS);
 server.start(route(handle),filters.FILTER_MAP);
 
 process.on('uncaughtException', function(err) {
-    console.log(err);
+    console.log('uncaught exception occurred.',err);
 });
 

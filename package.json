@@ -29,7 +29,8 @@
   },
   
   "dependencies": {
-	  "dot": "1.x"
+	  "dot": "1.x",
+      "phantomjs" : "*"
   },
   "readmeFilename": "README.md"
   
