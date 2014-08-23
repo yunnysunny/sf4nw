@@ -92,3 +92,5 @@ SF4NW支持你在使用配置一些全局信息，比如cluster模块启动的�
 	define(exports,'SESSION_MANAGE',define.__L('./lib/store/MemStoreManage', exports.SESSION_OPTION));
 
 SESSION_OPTION中的cookieName很好理解，类似于jsp使用jsessionid作为sessionid在浏览器端的cookie名称，这里默认使用nsessionid作为SF4NW的cookie名称；然后maxActiveTime是session的最大生存时间。最好还需要指定一个session数据的处理类，这里的MemStoreManage是将session数据直接存储到了内存中。注意由于node中各个进程中的变量是相互独立，如果将各个进程共享session数据的话需要牵扯到复杂的进程间通信。所以这里MemStoreManage并没有支持多进程，如果想支持多进程或者分布式session，请使用nosql之类的数据库来存储session，并实现一个继承自AbstractStoreManage的子类来对session进程管理。
+## 5.演示地址 ##
+在mopass的演示地址：[http://sf4nw.sturgeon.mopaas.com/](http://sf4nw.sturgeon.mopaas.com/ "mopass演示地址")，由于mopass的安全限制原因，目录中文件没有可执行权限，所以无法演示网页截图功能。
