@@ -87,3 +87,4 @@ define(exports,'SESSION_MANAGE',define.__L('../lib/store/MemStoreManage', export
  * */
 define(exports, 'CUSTOM_METHOD_NAME', 'm');
 
+console.log('process.platform:'+process.platform+',process.arch:'+process.arch);
