@@ -31,7 +31,12 @@ SnapshotController.prototype.doGet = function(request,response) {
 		cmd.getImage(function(data){
 			if (data.code == errcode.ERROR_SUCCESS && data.img) {					
 				
-				transfer.download(data.img);
+				transfer.download(data.img,function(err) {
+                    if (err) {
+                        return;
+                    }
+                    cmd.clear();
+                });
 			} else {
 				error.show(response,errcode.ERROR_INTER_ERROR);
 				

@@ -36,6 +36,7 @@ if (envVars.USE_MOPASS_FS == 'true') {//使用mopass的文件服务
 } else {//默认保存路径
     define(exports, 'SAVE_PATH', './images/');
 }
+define(exports,'SAVE_PAHT_MAX_SIZE',configJson.savePathMaxSize || envVars.savePathMaxSize || 1024*50);
 
 /**
  * 静态文件的Mime-Type和缓存时间配置

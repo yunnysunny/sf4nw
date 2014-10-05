@@ -44,11 +44,19 @@ function createHttpServer(route, filters,useSingle) {
 
             try {
                 // make sure we close down within 30 seconds
-                var killtimer = setTimeout(function() {
-                    process.exit(1);
-                }, 30000);
-                // But don't keep the process open just for that!
-                killtimer.unref();
+//                var killtimer = setTimeout(function() {
+//
+//                }, 3000);
+//                // But don't keep the process open just for that!
+//                killtimer.unref();
+
+                // try to send an error to the request that triggered the
+                // problem
+                res.statusCode = 500;
+                res.setHeader('content-type', 'text/plain');
+                res.end('矮油，出错了!\n');
+
+                process.exit(1);
 
                 // stop taking new requests.
                 server.close();
@@ -56,15 +64,11 @@ function createHttpServer(route, filters,useSingle) {
                     // Let the master know we're dead. This will trigger a
                     // 'disconnect' in the cluster master, and then it will fork
                     // a new worker.
-                    cluster.worker.disconnect();
+//                    cluster.worker.disconnect();
                 }
 
 
-                // try to send an error to the request that triggered the
-                // problem
-                res.statusCode = 500;
-                res.setHeader('content-type', 'text/plain');
-                res.end('矮油，出错了!\n');
+
             } catch (er2) {
                 // oh well, not much we can do at this point.
                 console.error('Error sending 500!', er2.stack);
@@ -122,10 +126,20 @@ function start(route, filters) {
 			cluster.fork();
 		}		
 
-		cluster.on('disconnect', function(worker) {
-			console.error('disconnect!');
-			cluster.fork();
-		});
+//		cluster.on('disconnect', function(worker) {
+//			console.error('disconnect!');
+//			cluster.fork();
+//		});
+        cluster.on('exit',function(code, signal) {
+            if( signal ) {
+                console.log("worker was killed by signal: "+signal);
+            } else if( code !== 0 ) {
+                console.log("worker exited with error code: "+code);
+            } else {
+                console.log("worker success!");
+            }
+            cluster.fork();
+        });
         console.log('[%s] master process running', process.pid);
 	} else {
 		// the worker
