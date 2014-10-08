@@ -53,7 +53,7 @@ function createHttpServer(route, filters,useSingle) {
                 // try to send an error to the request that triggered the
                 // problem
                 res.statusCode = 500;
-                res.setHeader('content-type', 'text/plain');
+                res.setHeader('content-type', 'text/plain;charset=utf-8');
                 res.end('矮油，出错了!\n');
 
                 process.exit(1);
