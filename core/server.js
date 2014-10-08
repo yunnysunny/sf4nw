@@ -56,7 +56,7 @@ function createHttpServer(route, filters,useSingle) {
                 res.setHeader('content-type', 'text/plain;charset=utf-8');
                 res.end('矮油，出错了!\n');
 
-                process.exit(1);
+
 
                 // stop taking new requests.
                 server.close();
@@ -67,7 +67,7 @@ function createHttpServer(route, filters,useSingle) {
 //                    cluster.worker.disconnect();
                 }
 
-
+                process.exit(1);
 
             } catch (er2) {
                 // oh well, not much we can do at this point.
@@ -105,11 +105,13 @@ function createHttpServer(route, filters,useSingle) {
  */
 function start(route, filters) {
 
-	var useSingle = process.env.USE_SINGLE_PROCESS == 'true';
+	var useSingle = (process.env.USE_SINGLE_PROCESS == 'true') ? true : false;
     if (useSingle) {
+        console.log('use single process');
         createHttpServer(route, filters,false);
         return;
     }
+    console.log('use child process');
 	if (cluster.isMaster) {
 		// In real life, you'd probably use more than just 2 workers,
 		// and perhaps not put the master and worker in the same file.
@@ -131,6 +133,7 @@ function start(route, filters) {
 //			cluster.fork();
 //		});
         cluster.on('exit',function(code, signal) {
+            console.log('process exit');
             if( signal ) {
                 console.log("worker was killed by signal: "+signal);
             } else if( code !== 0 ) {

@@ -6,9 +6,10 @@ try {
     if (!configJson || typeof (configJson) != 'object') {
         return;
     }
-    if (configJson.useSingleProcess) {
+    if (configJson.useSingleProcess == true) {
         process.env.USE_SINGLE_PROCESS = 'true';
     }
+    console.log('use single',process.env.USE_SINGLE_PROCESS)
 } catch (e) {
 
 }
