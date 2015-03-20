@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>jsonp请求测试</title>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    $.getJSON('/jsonp?callback=?',function(result) {
+        console.log(result);
+    });
+    var last = new Date().getTime();
+    var count = 0;
+    while (true) {
+        var now = new Date().getTime();
+        if (now - last > 1000 * 2) {
+            last = now;
+            count++;
+            console.log('the %dth count.',count);
+        }
+        if (count > 9) {
+            console.log('exist while.');
+            break;
+        }
+    }
+</script>
+</body>
+</html>

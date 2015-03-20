@@ -3,16 +3,14 @@ var configJson = {};
 var envVars = process.env;
 try {
     configJson = require('./config.json');
-    if (!configJson || typeof (configJson) != 'object') {
-        return;
-    }
-    if (configJson.useSingleProcess == true) {
-        process.env.USE_SINGLE_PROCESS = 'true';
-    }
-    console.log('use single',process.env.USE_SINGLE_PROCESS)
 } catch (e) {
 
 }
+if (configJson.useSingleProcess == true) {
+    process.env.USE_SINGLE_PROCESS = 'true';
+}
+
+console.log('use single',process.env.USE_SINGLE_PROCESS)
 /**
  * WOKER_PROCESS_COUNT和HTTP_PORT两个变量先从配置文件中读取，
  * 如果不存在然后从环境变量中读取
@@ -29,10 +27,7 @@ define(exports, 'HTTP_PORT', configJson.port ||  envVars.PORT || 8705);
 /**
  * 生成文件保存目录,注意路径要以`/`结尾
  */
-if (envVars.USE_MOPASS_FS == 'true') {//使用mopass的文件服务
-    var path = envVars[envVars.MOPASS_FS_PATH] + '/' + envVars[envVars.MOPASS_FS_NAME]+'/';
-    define(exports, 'SAVE_PATH', path);
-} else if (configJson.savePath){//使用配置文件中的保存路径
+if (configJson.savePath){//使用配置文件中的保存路径
     define(exports, 'SAVE_PATH', configJson.savePath);
 } else {//默认保存路径
     define(exports, 'SAVE_PATH', './images/');
