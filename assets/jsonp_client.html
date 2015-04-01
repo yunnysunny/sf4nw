@@ -13,7 +13,7 @@
         $.getJSON('http://sf4nw.whyun.com/jsonp?callback=?',function(result) {
             $('body').trigger(EVENT_JSONP_FINISHED,[result]);
         });
-        $('body').on(EVENT_JSONP_FINISHED,function(result) {
+        $('body').on(EVENT_JSONP_FINISHED,function(event,result) {
             $('#resultArea').text('返回状态码:'+result.code);
         });
     });
