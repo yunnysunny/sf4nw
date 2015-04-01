@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+<div id="resultArea" style="width:80%;height:200px;"></div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var EVENT_JSONP_FINISHED = 'eventJsonpFinished';
+        $.getJSON('http://sf4nw.whyun.com/jsonp?callback=?',function(result) {
+            $('body').trigger(EVENT_JSONP_FINISHED,[result]);
+        });
+        $('body').on(EVENT_JSONP_FINISHED,function(result) {
+            $('#resultArea').text('返回状态码:'+result.code);
+        });
+    });
+
+</script>
+</body>
+</html>
