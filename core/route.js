@@ -2,6 +2,7 @@ var path = require('path');
 var url = require('url');
 var resource = require('../lib/resource');
 require('../lib/string');
+var AbstractController = require('../lib/mvc/AbstractController');
 
 function route(handle) {
 	return function(request,response) {
@@ -10,8 +11,12 @@ function route(handle) {
 		
 
 		if (typeof(handle[pathname]) == 'object') {
-
-			handle[pathname].service(request,response);
+            var handleNow = handle[pathname];
+            if (typeof (handleNow.init) === 'function') {
+                AbstractController.prototype.init.call(handleNow.init);
+            }
+            AbstractController.prototype.service.call(handleNow,request,response);
+			//handle[pathname].service(request,response);
 		} else {
 			if (request.url == '/favicon.ico' || request.url.startWith(GLOBAL_STATIC_PATH)) {
 				resource.output(request,response,pathname);

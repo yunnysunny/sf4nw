@@ -1,10 +1,8 @@
 var server = require("./core/server");
-var route = require("./core/route");
 var handle = require('./config/handle');
 var filters = require('./config/filters');
-var inits = require('./config/inits');
 var define = require('./core/define');
-
+var inits = require('./config/inits');
 /**
  * 应用所在的根目录
  */
@@ -18,16 +16,17 @@ define(global, 'GLOBAL_VIEW_PATH', GLOBAL_APP_BASE + '/view');
 /**
  * 指定静态资源所能够访问的文件夹
  */
-define(global, 'GLOBAL_STATIC_PATH', '/assets/')
-/**
- * 指定初始化运行的函数列表
- */
-server.init(inits.AUTOLOAD_FUNS); 
-/**
- * 指定当前应用的路由器和拦截器
- * */
+define(global, 'GLOBAL_STATIC_PATH', '/assets/');
 
-server.start(route(handle),filters.FILTER_MAP);
+/**
+ * 指定当前应用的初始化函数列表、路由器和拦截器
+ * */
+var options = {
+    inits:inits.AUTOLOAD_FUNS,
+    handle:handle,
+    filters:filters.FILTER_MAP
+};
+server.start(options);
 
 process.on('uncaughtException', function(err) {
     console.log('uncaught exception occurred.',err);

@@ -1,8 +1,9 @@
 var http = require("http");
 var cluster = require('cluster');
 var config = require('../config/config');
-var HttpRequest = require('../lib/HttpRequest');
-var HttpResponse = require('../lib/HttpResponse');
+var route = require("../core/route");
+require('../lib/HttpRequest');
+require('../lib/HttpResponse');
 /**
  * 
  * @param {array} initFuns
@@ -16,7 +17,7 @@ function init(initFuns) {
 	
 }
 
-function createHttpServer(route, filters,useSingle) {
+function createHttpServer(handle, filters,useSingle) {
     var filterLen = 0;
     if (filters instanceof Array) {
         filterLen = filters.length;
@@ -30,33 +31,15 @@ function createHttpServer(route, filters,useSingle) {
     // worker processes to serve requests. How it works, caveats, etc.
 
     var server = require('http').createServer(function(req, res) {
-        req = new HttpRequest(req);
-        res = new HttpResponse(res);
 
         var d = domain.create();
         d.on('error', function(er) {//处理异常
-            console.error('error', er.stack);
-
-            // Note: we're in dangerous territory!
-            // By definition, something unexpected occurred,
-            // which we probably didn't want.
-            // Anything can happen now! Be very careful!
-
+            console.error('出现异常', er.stack);
             try {
-                // make sure we close down within 30 seconds
-//                var killtimer = setTimeout(function() {
-//
-//                }, 3000);
-//                // But don't keep the process open just for that!
-//                killtimer.unref();
 
-                // try to send an error to the request that triggered the
-                // problem
                 res.statusCode = 500;
                 res.setHeader('content-type', 'text/plain;charset=utf-8');
                 res.end('矮油，出错了!\n');
-
-
 
                 // stop taking new requests.
                 server.close();
@@ -75,9 +58,6 @@ function createHttpServer(route, filters,useSingle) {
             }
         });
 
-        // Because req and res were created before this domain existed,
-        // we need to explicitly add them.
-        // See the explanation of implicit vs explicit binding below.
         d.add(req);
         d.add(res);
 
@@ -90,7 +70,7 @@ function createHttpServer(route, filters,useSingle) {
                 }
             }
             console.log('cookie:'+req.headers.cookie);
-            route(req,res);
+            handle(req,res);
         });
     });
     server.listen(config.HTTP_PORT);
@@ -103,35 +83,22 @@ function createHttpServer(route, filters,useSingle) {
  * @param {array} handle
  * @param {array} filters
  */
-function start(route, filters) {
-
+function start(options) {//route, filters
+    init(options.inits);
 	var useSingle = (process.env.USE_SINGLE_PROCESS == 'true') ? true : false;
+    var handle = route(options.handle);
     if (useSingle) {
         console.log('use single process');
-        createHttpServer(route, filters,false);
+        createHttpServer(handle, options.filters,false);
         return;
     }
     console.log('use child process');
 	if (cluster.isMaster) {
-		// In real life, you'd probably use more than just 2 workers,
-		// and perhaps not put the master and worker in the same file.
-		//
-		// You can also of course get a bit fancier about logging, and
-		// implement whatever custom logic you need to prevent DoS
-		// attacks and other bad behavior.
-		//
-		// See the options in the cluster documentation.
-		//
-		// The important thing is that the master does very little,
-		// increasing our resilience to unexpected errors.
+
 		for(var i=0;i<config.WOKER_PROCESS_COUNT;i++) {
 			cluster.fork();
 		}		
 
-//		cluster.on('disconnect', function(worker) {
-//			console.error('disconnect!');
-//			cluster.fork();
-//		});
         cluster.on('exit',function(code, signal) {
             console.log('process exit');
             if( signal ) {
@@ -141,15 +108,15 @@ function start(route, filters) {
             } else {
                 console.log("worker success!");
             }
-            cluster.fork();
+            cluster.fork();//进程重启
         });
         console.log('[%s] master process running', process.pid);
 	} else {
 		// the worker
-        createHttpServer(route, filters,useSingle);
+
+        createHttpServer(handle, options.filters,useSingle);
 	}
 
 }
 
 exports.start = start;
-exports.init = init;

@@ -1,8 +1,9 @@
-var define = require('../core/define');
 
-define(exports,'/',____L('../controller/IndexController'));
-define(exports,'/snapshot',define.__L('../controller/SnapshotController'));
-define(exports,'/posttest',define.__L('../controller/PostTestController'));
-define(exports,'/gettest',define.__L('../controller/GetTestController'));
-define(exports,'/gettest2',define.__L('../controller/GetTestController2'));
-define(exports,'/jsonp',define.__L('../controller/JsonpTestController'));
+module.exports = {
+    '/' : require('../controller/index_controller'),
+    '/snapshot' : require('../controller/snapshot_controller'),
+    '/posttest':require('../controller/post_test_controller'),
+    '/gettest' : require('../controller/get_test_controller'),
+    '/gettest2' : require('../controller/get_test2_controller'),
+    '/jsonp' : require('../controller/jsonp_test_controller')
+};

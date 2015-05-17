@@ -19,25 +19,25 @@ console.log('use single',process.env.USE_SINGLE_PROCESS)
 /**
  * 应用启动后cluster模块开启的进程数
  */
-define(exports, 'WOKER_PROCESS_COUNT', configJson.workCount || envVars.WORK_COUNT ||  1);
+exports.WOKER_PROCESS_COUNT = configJson.workCount || envVars.WORK_COUNT ||  1;
 /**
  * 应用开启的端口号
  */
-define(exports, 'HTTP_PORT', configJson.port ||  envVars.PORT || 8705);
+exports.HTTP_PORT= configJson.port ||  envVars.PORT || 8705;
 /**
  * 生成文件保存目录,注意路径要以`/`结尾
  */
 if (configJson.savePath){//使用配置文件中的保存路径
-    define(exports, 'SAVE_PATH', configJson.savePath);
+    exports.SAVE_PATH = configJson.savePath;
 } else {//默认保存路径
-    define(exports, 'SAVE_PATH', './images/');
+    exports.SAVE_PATH= './images/';
 }
-define(exports,'SAVE_PAHT_MAX_SIZE',configJson.savePathMaxSize || envVars.savePathMaxSize || 1024*50);
+exports.SAVE_PAHT_MAX_SIZE = configJson.savePathMaxSize || envVars.savePathMaxSize || 1024*50;
 
 /**
  * 静态文件的Mime-Type和缓存时间配置
  */
-define(exports,'EXT_TO_CONTENT_TYPE' , {
+exports.EXT_TO_CONTENT_TYPE = {
 		'.html' : {contentType : 'text/html', maxAge : 0, compress : true},
 		'.htm' : {contentType : 'text/html', maxAge : 0, compress : true},
 		'.png' : {contentType : 'image/png', maxAge : 0},
@@ -57,22 +57,22 @@ define(exports,'EXT_TO_CONTENT_TYPE' , {
 		'.json': {contentType : 'application/json', maxAge : 0, compress : true},
 		'.pdf': {contentType : 'application/pdf', maxAge : 7200},
 		'.xml': {contentType : 'text/xml', maxAge : 0, compress : true}
-});
+};
 /**
  * 应用的默认的欢迎页
  */
-define(exports,'DEFAULT_WELCOME_INDEX',{});
+exports.DEFAULT_WELCOME_INDEX ={};
 /**
  * session的配置选项
  */
-define(exports,'SESSION_OPTION', {
+exports.SESSION_OPTION = {
 	cookieName : 'nsessionid',
 	maxActiveTime : 7200	
-});
+};
 /**
  * session处理对象
  */
-define(exports,'SESSION_MANAGE',define.__L('../lib/store/MemStoreManage', exports.SESSION_OPTION));
+exports.SESSION_MANAGE =define.__L('../lib/store/MemStoreManage', exports.SESSION_OPTION);
 
 
 /**
@@ -82,6 +82,6 @@ define(exports,'SESSION_MANAGE',define.__L('../lib/store/MemStoreManage', export
  * @example baseurl?m=show，控制器在判断当前请求为get时，会读取m参数，
  * 来获取当前需要调用的控制的函数名为showAction
  * */
-define(exports, 'CUSTOM_METHOD_NAME', 'm');
+exports.CUSTOM_METHOD_NAME ='m';
 
 console.log('process.platform:'+process.platform+',process.arch:'+process.arch);

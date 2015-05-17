@@ -1,7 +1,6 @@
-var define = require('../core/define');
 
 var FILTER_MAP = [
-    define.__L('../filter/CookieFilter'),
-    define.__L('../filter/SessionFilter')
+    require('../filter/cookie_filter'),
+    require('../filter/session_filter')
 ];
-define(exports, 'FILTER_MAP', FILTER_MAP);
+exports.FILTER_MAP = FILTER_MAP;

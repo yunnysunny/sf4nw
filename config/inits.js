@@ -26,4 +26,4 @@ function initSnapshot() {
 	});
 }
 
-define(exports, 'AUTOLOAD_FUNS', [ initSnapshot ]);
+exports.AUTOLOAD_FUNS = [ initSnapshot ];
