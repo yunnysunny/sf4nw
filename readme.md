@@ -11,66 +11,68 @@ http请求产生后首先经过各个拦截器处理。如果在处理过程中�
 ### 2.1 入口代码  
 框架的入口文件是index.js文件，直接看一下index.js的源代码： 
  
-    var server = require("./server");	
-	var route = require("./route");    
-	var handle = require('./handle');  
-	var filters = require('./filters');   
-	var inits = require('./inits');   
-	var define = require('./define');
-	/**
-	 * 应用所在的根目录
-	 */
-	define(global, 'GLOBAL_APP_BASE', __dirname);
-	/**
-	 * 视图所在文件夹
-	 */
-	define(global, 'GLOBAL_VIEW_PATH', GLOBAL_APP_BASE + '/view');
-	/**
-	 * 指定静态资源所能够访问的文件夹
-	 */
-	define(global, 'GLOBAL_STATIC_PATH', '/assets/')
-	/**
-	 * 指定初始化运行的函数列表
-	 */
-	server.init(inits.AUTOLOAD_FUNS); 
-	/**
-	 * 指定当前应用的路由器和拦截器
-	 * */
-	server.start(route(handle),filters.FILTER_MAP);
+    var server = require("./core/server");
+    var handle = require('./config/handle');
+    var filters = require('./config/filters');
+    var define = require('./core/define');
+    var inits = require('./config/inits');
+    /**
+     * 应用所在的根目录
+     */
+    define(global, 'GLOBAL_APP_BASE', __dirname);
+    
+    define(global,'VIEW_TPL_NAME','dot');
+    /**
+     * 视图所在文件夹
+     */
+    define(global, 'GLOBAL_VIEW_PATH', GLOBAL_APP_BASE + '/view');
+    /**
+     * 指定静态资源所能够访问的文件夹
+     */
+    define(global, 'GLOBAL_STATIC_PATH', '/assets/');
+    
+    /**
+     * 指定当前应用的初始化函数列表、路由器和拦截器
+     * */
+    var options = {
+        inits:inits.AUTOLOAD_FUNS,
+        handle:handle,
+        filters:filters.FILTER_MAP
+    };
+    server.start(options);
+    
+    process.on('uncaughtException', function(err) {
+        console.log('uncaught exception occurred.',err);
+    });
 这里指出server.init函数的作用是指定应用启动前需要自动运行的函数列表，这个功能可以理解成j2ee中自启动的servlet。server.start函数指定系统运行所需要的路由器和拦截器，其中拦截器可以不指定，但是路由器一定要指定。
 ### 2.2 拦截器配置    
 接着看拦截器部分的配置代码filters.js： 
-	var define = require('./define');
-	
 	var FILTER_MAP = [
-	    define.__L('./filter/CookieFilter'),
-	    define.__L('./filter/SessionFilter')
-	];
-	define(exports, 'FILTER_MAP', FILTER_MAP);
+        require('../filter/cookie_filter'),
+        require('../filter/session_filter')
+    ];
+    exports.FILTER_MAP = FILTER_MAP;
 FILTER_MAP是一个数组，里面必须是AbstractFilter的子类对象，且该对象必须实现了其doFilter函数，该函数中如果return false则表示当前请求处理结束，返回处理结果到浏览器端，否则将请求的处理权转交给下一个拦截器。  
 **注意，这里默认开启了两个拦截器，以实现对于cookie和session的支持。**
 ### 2.3 路由器配置
-在2.1中server.start函数的第一个参数是路由器，使用路由器时需要指定一个handle文件，这里的handle可以理解为j2ee中的web.xml，里面放置的是url和controller对象之间的映射关系。controller也就我们常说的控制器，所有控制器类中都必须至少包含一个doPost或者doGet方法（这个地方也是仿照了j2ee中servlet的做法）。将handle.js中一行配置项拿出来作说明：
+在2.1中server.start函数的第一个参数是路由器，使用路由器时需要指定一个handle文件，这里的handle可以理解为j2ee中的web.xml，里面放置的是url和controller对象之间的映射关系。controller也就我们常说的控制器，所有控制器类中都必须至少包含一个doPost或者doGet方法（这个地方也是仿照了j2ee中servlet的做法）。将handle.js中配置项拿出来作说明：
 
-	define(exports,'/',define.__L('./controller/IndexController'));
+	module.exports = {
+        '/' : require('../controller/index_controller'),
+        '/snapshot' : require('../controller/snapshot_controller'),
+        '/posttest':require('../controller/post_test_controller'),
+        '/gettest' : require('../controller/get_test_controller'),
+        '/gettest2' : require('../controller/get_test2_controller'),
+        '/jsonp' : require('../controller/jsonp_test_controller')
+    };
 
-这里将url '/'映射到IndexController这个类所对应的对象上，接着看IndexController的代码：
+这里将url '/'映射到index_controller所对应的对象上，接着看index_controller的代码：
 
-	var Controller = require('../lib/mvc/AbstractController');
-	var util = require('util');
-	
-	function IndexController() {
-		
-	}
-	
-	util.inherits(IndexController,Controller);
-	
-	IndexController.prototype.doGet = function(request,response) {
-		console.log('index [get]');
-		response.loadView('index');
-	}
-	
-	module.exports = IndexController; 
+	exports.doGet = function(request,response) {
+    	console.log('index [get]');
+    
+    	response.loadView('index');
+    }
 可以看到里面含有一个doGet方法，这样请求应用首页的时候，将会加载一个试图（关于视图的处理下面会讲到）。
 ## 3.核心对象 ##
 在j2ee中，我们最常操作的对象有HttpServletRequest、HttpServletResponse、HttpSession、Cookie等，以上提到的四个类，在SF4NW中也有对应的实现。  
@@ -80,16 +82,16 @@ node中提供了对于http请求（类http.IncomingMessage）和响应（类http
 SF4NW支持你在使用配置一些全局信息，比如cluster模块启动的进程数、http服务用到的端口号、静态文件的Mime-Type和缓存时间配置等，这里说一下session的配置信息：
 
 	/**
-	 * session的配置选项
-	 */
-	define(exports,'SESSION_OPTION', {
-		cookieName : 'nsessionid',
-		maxActiveTime : 7200	
-	});
-	/**
-	 * session处理对象
-	 */
-	define(exports,'SESSION_MANAGE',define.__L('./lib/store/MemStoreManage', exports.SESSION_OPTION));
+     * session的配置选项
+     */
+    exports.SESSION_OPTION = {
+    	cookieName : 'nsessionid',
+    	maxActiveTime : 7200	
+    };
+    /**
+     * session处理对象
+     */
+    exports.SESSION_MANAGE =define.__L('../lib/store/MemStoreManage', exports.SESSION_OPTION);
 
 SESSION_OPTION中的cookieName很好理解，类似于jsp使用jsessionid作为sessionid在浏览器端的cookie名称，这里默认使用nsessionid作为SF4NW的cookie名称；然后maxActiveTime是session的最大生存时间。最好还需要指定一个session数据的处理类，这里的MemStoreManage是将session数据直接存储到了内存中。注意由于node中各个进程中的变量是相互独立，如果将各个进程共享session数据的话需要牵扯到复杂的进程间通信。所以这里MemStoreManage并没有支持多进程，如果想支持多进程或者分布式session，请使用nosql之类的数据库来存储session，并实现一个继承自AbstractStoreManage的子类来对session进程管理。
 ## 5.演示地址 ##
