@@ -16,12 +16,15 @@ function isValidValue(result, maxAge) {
 	return valid;
 }
 
-function addNewSession(response) {
+function addNewSession(request,response) {
 	var sessionid = sessionManage.create();
 	if (sessionid) {
 		var cookie = new Cookie(sessionOption.cookieName,sessionid,0,'/',null,true);
 		response.addCookie(cookie);
-	}
+        request.sessionId = sessionid;
+	} else {
+        request.sessionId = '';
+    }
 	
 }
 
@@ -31,13 +34,20 @@ exports.doFilter = function(request, response) {
 		console.log('sessionid:' + sessionid);
 		var sessionResult = sessionManage.get(sessionid);
 		if (isValidValue(sessionResult, sessionOption.maxActiveTime)) {
-			request.session = sessionResult;
+			request.session = sessionResult.values;//得到session数据
+            request.sessionId = sessionid;
 		} else {
-			addNewSession(response);
+			addNewSession(request,response);
 		}
 	} else {
-		addNewSession(response);
+		addNewSession(request,response);
 	}
+    var originEnd = response.end;
+    response.end = function(data,encoding) {//rewrite
+        sessionManage.update(request.sessionId,request.session);
+        response.end = originEnd;//recovery
+        response.end(data,encoding);
+    }
 	return true;
 }
 
