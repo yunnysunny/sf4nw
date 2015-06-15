@@ -35,6 +35,9 @@ function createHttpServer(handle, filters,useSingle) {
         var d = domain.create();
         d.on('error', function(er) {//处理异常
             console.error('出现异常', er.stack);
+            if (res.headersSent) {
+                return;
+            }
             try {
 
                 res.statusCode = 500;
