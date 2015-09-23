@@ -105,13 +105,17 @@ function start(options) {//route, filters
         cluster.on('exit',function(code, signal) {
             console.log('process exit');
             if( signal ) {
-                console.log("worker was killed by signal: "+signal);
+                console.error("worker was killed by signal: "+signal);
             } else if( code !== 0 ) {
-                console.log("worker exited with error code: "+code);
+                console.error("worker exited with error code: "+code);
             } else {
-                console.log("worker success!");
+                console.error("worker exit!");
             }
             cluster.fork();//进程重启
+        });
+        process.on('SIGINT', function () {
+            console.warn('============kill master process============');
+            process.exit();//杀死主进程
         });
         console.log('[%s] master process running', process.pid);
 	} else {
