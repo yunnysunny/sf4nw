@@ -93,6 +93,10 @@ function start(options) {//route, filters
     if (useSingle) {
         console.log('use single process');
         createHttpServer(handle, options.filters,false);
+        process.on('SIGINT', function () {
+            console.warn('============kill master process============');
+            process.exit();//杀死主进程
+        });
         return;
     }
     console.log('use child process');
