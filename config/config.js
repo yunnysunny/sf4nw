@@ -61,7 +61,7 @@ exports.EXT_TO_CONTENT_TYPE = {
 /**
  * 应用的默认的欢迎页
  */
-exports.DEFAULT_WELCOME_INDEX ={};
+exports.DEFAULT_WELCOME_INDEX =['index.html','index.htm'];
 /**
  * session的配置选项
  */

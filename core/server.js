@@ -90,6 +90,12 @@ function start(options) {//route, filters
     init(options.inits);
 	var useSingle = (process.env.USE_SINGLE_PROCESS == 'true') ? true : false;
     var handle = route(options.handle);
+
+    process.on('exit', function(code) {
+        // 进程退出后，其后的事件循环将会结束，计时器也不会被执行
+        console.warn('进程退出码是:', code);
+    });
+
     if (useSingle) {
         console.log('use single process');
         createHttpServer(handle, options.filters,false);
