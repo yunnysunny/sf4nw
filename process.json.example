@@ -1,0 +1,5 @@
+{
+  "name":"sf4nw",
+  "script"      : "./app.js",
+  "instances"   : 1
+}

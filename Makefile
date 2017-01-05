@@ -23,11 +23,10 @@ set_env_vars:
 	DISPLAY=:0
 
 run:set_env_vars
-	pm2 startOrReload $(APP_PATH)/$(APP_BOOT_SCRIPT) --name $(APP_NAME)
+	pm2 startOrReload process.json
 
 stop:
 	pm2 stop $(APP_NAME)
-
 
 
 .PHONY: install pull tag set_env_vars  run stop
