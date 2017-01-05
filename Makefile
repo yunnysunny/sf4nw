@@ -4,6 +4,7 @@ APP_PATH := .
 APP_BOOT_SCRIPT := app.js
 APP_NAME := sf4nw
 now := $(shell date '+%Y%m%d%H%M%S')
+branch := master
 
 #.RECIPEPREFIX +=
 
