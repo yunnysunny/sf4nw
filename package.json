@@ -9,29 +9,30 @@
   "contributors": [
     {
       "name": "yunnysunny",
-	  "email": "yunnysunny@gmail.com"
+      "email": "yunnysunny@gmail.com"
     }
   ],
-  "repository": 
-  {
-	"type": "git",
-	"url": "https://github.com/yunnysunny/sf4nw.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yunnysunny/sf4nw.git"
   },
-	  
   "bugs": {
     "url": "https://github.com/yunnysunny/sf4nw/issues"
   },
   "homepage": "https://github.com/yunnysunny/sf4nw",
   "main": "app.js",
-  
   "engines": {
     "node": ">=0.7"
   },
-  
   "dependencies": {
-	  "dot": "1.x",
-      "phantomjs" : "*"
+    "dot": "1.x",
+    "phantomjs": "*",
+    "snyk": "^1.41.1"
   },
-  "readmeFilename": "README.md"
-  
+  "readmeFilename": "README.md",
+  "scripts": {
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
+  },
+  "snyk": true
 }
