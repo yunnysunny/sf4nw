@@ -27,7 +27,7 @@
   "dependencies": {
     "dot": "1.x",
     "phantomjs": "*",
-    "snyk": "^1.83.0"
+    "snyk": "^1.85.0"
   },
   "readmeFilename": "README.md",
   "scripts": {
