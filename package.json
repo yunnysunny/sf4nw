@@ -27,12 +27,13 @@
   "dependencies": {
     "dot": "1.x",
     "phantomjs": "*",
-    "snyk": "^1.85.0"
+    "snyk": "^1.161.1"
   },
   "readmeFilename": "README.md",
   "scripts": {
     "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "prepare": "npm run snyk-protect",
+    "prepublish": "npm run snyk-protect"
   },
   "snyk": true
 }
