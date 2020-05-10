@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.5
+version: v1.14.1
 ignore: {}
 # patches apply the minimum changes required to fix a vulnerability
 patch:
@@ -49,3 +49,6 @@ patch:
         patched: '2019-07-04T02:31:16.103Z'
     - phantomjs > request > form-data > async > lodash:
         patched: '2019-07-04T02:31:16.103Z'
+  SNYK-JS-LODASH-567746:
+    - phantomjs > request > form-data > async > lodash:
+        patched: '2020-05-10T05:45:31.461Z'
