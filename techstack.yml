@@ -1,0 +1,99 @@
+repo_name: yunnysunny/sf4nw
+report_id: b2176d546d22879db77ccc7787ede4e4
+version: 0.1
+repo_type: Public
+timestamp: '2024-02-05T15:57:21+00:00'
+requested_by: yunnysunny
+provider: github
+branch: master
+detected_tools_count: 6
+tools:
+- name: JavaScript
+  description: Lightweight, interpreted, object-oriented language with first-class
+    functions
+  website_url: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/1209/javascript.jpeg
+  detection_source_url: https://github.com/yunnysunny/sf4nw
+  detection_source: Repo Metadata
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/yunnysunny/sf4nw
+  detection_source: Repo Metadata
+- name: PhantomJS
+  description: Scriptable Headless WebKit
+  website_url: https://phantomjs.org/
+  version: 1.9.7
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Headless Browsers
+  image_url: https://img.stackshare.io/service/1832/phantomjs.png
+  detection_source_url: https://github.com/yunnysunny/sf4nw/blob/master/npm-shrinkwrap.json
+  detection_source: package.json
+  last_updated_by: snyk-bot
+  last_updated_on: 2018-06-21 06:47:55.000000000 Z
+- name: Snyk
+  description: Automatically find &amp; fix vulnerabilities in your code, containers,
+    Kubernetes, and Terraform
+  website_url: https://snyk.io/
+  version: 1.319.2
+  open_source: false
+  hosted_saas: true
+  category: Build, Test, Deploy
+  sub_category: Code Review
+  image_url: https://img.stackshare.io/service/5326/6p1SNAJu.jpg
+  detection_source_url: https://github.com/yunnysunny/sf4nw/blob/master/package.json
+  detection_source: ".snyk"
+  last_updated_by: snyk-bot
+  last_updated_on: 2018-06-21 06:47:55.000000000 Z
+- name: npm
+  description: The package manager for JavaScript.
+  website_url: https://www.npmjs.com/
+  open_source: false
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Front End Package Manager
+  image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
+  detection_source_url: https://github.com/yunnysunny/sf4nw/blob/master/package.json
+  detection_source: package.json
+  last_updated_by: 白一梓
+  last_updated_on: 2013-09-05 14:42:05.000000000 Z
+- name: dot
+  description: Concise and fast javascript templating compatible with nodejs and other
+    javascript environments
+  package_url: https://www.npmjs.com/dot
+  version: 1.0.2
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: npm Packages
+  image_url: https://img.stackshare.io/package/17465/default_10a98ebc0146ab94b0fde6f7013c1279c82e4135.png
+  detection_source_url: https://github.com/yunnysunny/sf4nw/blob/master/npm-shrinkwrap.json
+  detection_source: package.json
+  last_updated_by: 白一梓
+  last_updated_on: 2013-09-05 14:42:05.000000000 Z
+  vulnerabilities:
+  - name: Improper Control of Generation of Code in doT
+    cve_id: CVE-2020-8141
+    cve_url: https://github.com/advisories/GHSA-297x-8xj4-vcxv
+    detected_date: Jun 24
+    severity: high
+    first_patched: 1.1.3
+  - name: Command Injection in dot
+    cve_id: 
+    cve_url: https://github.com/advisories/GHSA-4859-gpc7-4j66
+    detected_date: Aug 22
+    severity: moderate
+    first_patched: 
